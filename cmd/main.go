@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net"
@@ -9,10 +10,15 @@ import (
 	"os/signal"
 
 	"github.com/o-ga09/note-app-backendapi/api"
+	"github.com/o-ga09/note-app-backendapi/db/dao"
+	"github.com/o-ga09/note-app-backendapi/db/db"
 	"github.com/o-ga09/note-app-backendapi/handler"
+	"github.com/o-ga09/note-app-backendapi/services/note"
+	"github.com/o-ga09/note-app-backendapi/services/user"
 )
 
 func main() {
+	ctx := context.Background()
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -22,7 +28,18 @@ func main() {
 		panic(err)
 	}
 
-	h := handler.NewHandler()
+	db := db.Connect(ctx)
+	if db == nil {
+		panic(err)
+	}
+
+	noteRepo := dao.NewNoteDao(db)
+	noteService := note.NewNoteService(noteRepo)
+
+	userRepo := dao.NewUserDao(db)
+	userService := user.NewUserService(userRepo)
+
+	h := handler.NewHandler(*noteService, *userService)
 	handler, err := api.NewServer(h)
 
 	slog.Info("starting server")
