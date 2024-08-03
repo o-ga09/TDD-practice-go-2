@@ -1014,7 +1014,7 @@ func decodeGetNotesResponse(resp *http.Response) (res GetNotesRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response GetNotesOKApplicationJSON
+			var response Notes
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -1030,15 +1030,6 @@ func decodeGetNotesResponse(resp *http.Response) (res GetNotesRes, _ error) {
 					Err:         err,
 				}
 				return res, err
-			}
-			// Validate response.
-			if err := func() error {
-				if err := response.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return res, errors.Wrap(err, "validate")
 			}
 			return &response, nil
 		default:
@@ -1478,7 +1469,7 @@ func decodeGetUsersResponse(resp *http.Response) (res GetUsersRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response GetUsersOKApplicationJSON
+			var response Users
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

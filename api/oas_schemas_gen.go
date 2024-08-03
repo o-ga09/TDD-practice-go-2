@@ -263,14 +263,6 @@ func (*ErrorNotfound) getNotesRes() {}
 func (*ErrorNotfound) getUserRes()  {}
 func (*ErrorNotfound) getUsersRes() {}
 
-type GetNotesOKApplicationJSON []Note
-
-func (*GetNotesOKApplicationJSON) getNotesRes() {}
-
-type GetUsersOKApplicationJSON []User
-
-func (*GetUsersOKApplicationJSON) getUsersRes() {}
-
 // Ref: #/components/schemas/Note
 type Note struct {
 	ID        OptUUID     `json:"id"`
@@ -332,6 +324,56 @@ func (s *Note) SetUpdatedAt(val OptDateTime) {
 
 func (*Note) createNoteRes() {}
 func (*Note) getNoteRes()    {}
+
+// Ref: #/components/schemas/Notes
+type Notes struct {
+	TotalCount    OptInt32  `json:"totalCount"`
+	Count         OptInt32  `json:"count"`
+	NextPagetoken OptString `json:"nextPagetoken"`
+	Notes         []Note    `json:"notes"`
+}
+
+// GetTotalCount returns the value of TotalCount.
+func (s *Notes) GetTotalCount() OptInt32 {
+	return s.TotalCount
+}
+
+// GetCount returns the value of Count.
+func (s *Notes) GetCount() OptInt32 {
+	return s.Count
+}
+
+// GetNextPagetoken returns the value of NextPagetoken.
+func (s *Notes) GetNextPagetoken() OptString {
+	return s.NextPagetoken
+}
+
+// GetNotes returns the value of Notes.
+func (s *Notes) GetNotes() []Note {
+	return s.Notes
+}
+
+// SetTotalCount sets the value of TotalCount.
+func (s *Notes) SetTotalCount(val OptInt32) {
+	s.TotalCount = val
+}
+
+// SetCount sets the value of Count.
+func (s *Notes) SetCount(val OptInt32) {
+	s.Count = val
+}
+
+// SetNextPagetoken sets the value of NextPagetoken.
+func (s *Notes) SetNextPagetoken(val OptString) {
+	s.NextPagetoken = val
+}
+
+// SetNotes sets the value of Notes.
+func (s *Notes) SetNotes(val []Note) {
+	s.Notes = val
+}
+
+func (*Notes) getNotesRes() {}
 
 // NewOptDateTime returns new OptDateTime with value set to v.
 func NewOptDateTime(v time.Time) OptDateTime {
@@ -699,3 +741,53 @@ func (s *User) SetUpdatedAt(val OptDateTime) {
 func (*User) createUserRes() {}
 func (*User) getUserRes()    {}
 func (*User) updateUserRes() {}
+
+// Ref: #/components/schemas/Users
+type Users struct {
+	TotalCount    OptInt32  `json:"totalCount"`
+	Count         OptInt32  `json:"count"`
+	NextPagetoken OptString `json:"nextPagetoken"`
+	Users         []User    `json:"users"`
+}
+
+// GetTotalCount returns the value of TotalCount.
+func (s *Users) GetTotalCount() OptInt32 {
+	return s.TotalCount
+}
+
+// GetCount returns the value of Count.
+func (s *Users) GetCount() OptInt32 {
+	return s.Count
+}
+
+// GetNextPagetoken returns the value of NextPagetoken.
+func (s *Users) GetNextPagetoken() OptString {
+	return s.NextPagetoken
+}
+
+// GetUsers returns the value of Users.
+func (s *Users) GetUsers() []User {
+	return s.Users
+}
+
+// SetTotalCount sets the value of TotalCount.
+func (s *Users) SetTotalCount(val OptInt32) {
+	s.TotalCount = val
+}
+
+// SetCount sets the value of Count.
+func (s *Users) SetCount(val OptInt32) {
+	s.Count = val
+}
+
+// SetNextPagetoken sets the value of NextPagetoken.
+func (s *Users) SetNextPagetoken(val OptString) {
+	s.NextPagetoken = val
+}
+
+// SetUsers sets the value of Users.
+func (s *Users) SetUsers(val []User) {
+	s.Users = val
+}
+
+func (*Users) getUsersRes() {}

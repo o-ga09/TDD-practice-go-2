@@ -323,7 +323,7 @@ func encodeGetNoteResponse(response GetNoteRes, w http.ResponseWriter, span trac
 
 func encodeGetNotesResponse(response GetNotesRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *GetNotesOKApplicationJSON:
+	case *Notes:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -467,7 +467,7 @@ func encodeGetUserResponse(response GetUserRes, w http.ResponseWriter, span trac
 
 func encodeGetUsersResponse(response GetUsersRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *GetUsersOKApplicationJSON:
+	case *Users:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))

@@ -1,16 +1,40 @@
 package main
 
-import "gofr.dev/pkg/gofr"
+import (
+	"fmt"
+	"log/slog"
+	"net"
+	"net/http"
+	"os"
+	"os/signal"
+
+	"github.com/o-ga09/note-app-backendapi/api"
+	"github.com/o-ga09/note-app-backendapi/handler"
+)
 
 func main() {
-	// initialize gofr object
-	app := gofr.New()
-	// register route greet
-	app.GET("/greet", func(ctx *gofr.Context) (interface{}, error) {
-		return "Hello World!", nil
-	})
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	listen, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
+	if err != nil {
+		panic(err)
+	}
 
-	// Runs the server, it will listen on the default port 8000.
-	// it can be over-ridden through configs
-	app.Run()
+	h := handler.NewHandler()
+	handler, err := api.NewServer(h)
+
+	slog.Info("starting server")
+	go func() {
+		err = http.Serve(listen, handler)
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	slog.Info("stopping srever")
 }

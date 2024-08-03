@@ -23,92 +23,90 @@ paths:
     get:
       operationId: getNotes
       summary: Get all notes
-      tags: [ 'note' ]
+      tags: ["note"]
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Note'
-        '400':
+                $ref: "#/components/schemas/Notes"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '404':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorNotfound'
-        '403':
+                $ref: "#/components/schemas/ErrorNotfound"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'
+                $ref: "#/components/schemas/CommonError"
     post:
       operationId: createNote
       summary: Create a note
-      tags: [ 'note' ]
+      tags: ["note"]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Note'
+              $ref: "#/components/schemas/Note"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Note'
-        '400':
+                $ref: "#/components/schemas/Note"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '403':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
   /note/{noteId}:
     get:
       operationId: getNote
       summary: Get a note
-      tags: [ 'note' ]
+      tags: ["note"]
       parameters:
         - name: noteId
           in: path
@@ -117,46 +115,46 @@ paths:
             type: string
           description: Note ID
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Note'
-        '400':
+                $ref: "#/components/schemas/Note"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '404':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorNotfound'
-        '403':
+                $ref: "#/components/schemas/ErrorNotfound"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
     put:
       operationId: updateNote
       summary: Update a note
-      tags: [ 'note' ]
+      tags: ["note"]
       parameters:
         - name: noteId
           in: path
@@ -169,42 +167,42 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Note'
+              $ref: "#/components/schemas/Note"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateNote'
-        '400':
+                $ref: "#/components/schemas/UpdateNote"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '403':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'          
+                $ref: "#/components/schemas/CommonError"
     delete:
       operationId: deleteNote
       summary: Delete a note
-      tags: [ 'note' ]
+      tags: ["note"]
       parameters:
         - name: noteId
           in: path
@@ -213,126 +211,124 @@ paths:
             type: string
           description: Note ID
       responses:
-        '204':
+        "204":
           description: Note Deleted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeleteNote'
-        '400':
+                $ref: "#/components/schemas/DeleteNote"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '403':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
   /users:
     get:
       operationId: getUsers
       summary: Get all users
-      tags: [ 'user' ]
+      tags: ["user"]
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/Users"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '404':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorNotfound'
-        '403':
+                $ref: "#/components/schemas/ErrorNotfound"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
     post:
       operationId: createUser
       summary: Create a user
-      tags: [ 'user' ]
+      tags: ["user"]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/User"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '403':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
   /user/{userId}:
     get:
       operationId: getUser
       summary: Get a user
-      tags: [ 'user' ]
+      tags: ["user"]
       parameters:
         - name: userId
           in: path
@@ -341,46 +337,46 @@ paths:
             type: string
           description: User ID
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/User"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '404':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorNotfound'
-        '403':
+                $ref: "#/components/schemas/ErrorNotfound"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
     put:
       operationId: updateUser
       summary: Update a user
-      tags: [ 'user' ]
+      tags: ["user"]
       parameters:
         - name: userId
           in: path
@@ -393,42 +389,42 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUser'
+              $ref: "#/components/schemas/UpdateUser"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/User"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '403':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
     delete:
       operationId: deleteUser
       summary: Delete a user
-      tags: [ 'user' ]
+      tags: ["user"]
       parameters:
         - name: userId
           in: path
@@ -437,36 +433,36 @@ paths:
             type: string
           description: User ID
       responses:
-        '204':
+        "204":
           description: No Content
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeleteUser'
-        '400':
+                $ref: "#/components/schemas/DeleteUser"
+        "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorBadRequest'
-        '403':
+                $ref: "#/components/schemas/ErrorBadRequest"
+        "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorForbidden'
-        '500':
+                $ref: "#/components/schemas/ErrorForbidden"
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorInternalServerError'
-        'default':
+                $ref: "#/components/schemas/ErrorInternalServerError"
+        "default":
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommonError'                
+                $ref: "#/components/schemas/CommonError"
 components:
   schemas:
     Note:
@@ -485,6 +481,22 @@ components:
         updatedAt:
           type: string
           format: date-time
+    Notes:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        nextPagetoken:
+          type: string
+          format: string
+        notes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Note"
     UpdateNote:
       type: object
       properties:
@@ -526,6 +538,22 @@ components:
         updatedAt:
           type: string
           format: date-time
+    Users:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        nextPagetoken:
+          type: string
+          format: string
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
     UpdateUser:
       type: object
       properties:
