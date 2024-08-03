@@ -1,11 +1,9 @@
-# gofrを試す
-
-<img src="./docs/image.png">
+# Backend API in ogen
 
 ## テーマ
 
 - マイクロサービスで作る
-- g-fr を使用する
+- ogenを使用する
 
 ## つくるもの
 
