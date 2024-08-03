@@ -1,0 +1,9 @@
+development:
+  dialect: mysql
+  datasource: user:P@ssw0rd@tcp/note_app?parseTime=true
+  dir: mysql
+
+production:
+  dialect: mysql
+  datasource: dbname=noteappdb01
+  dir: mysql

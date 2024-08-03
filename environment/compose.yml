@@ -21,7 +21,7 @@ services:
       - db
     build:
       context: ../
-      dockerfile: docker/go/Dockerfile
+      dockerfile: environment/go/Dockerfile
       target: dev
     environment:
       ENV: DEV
