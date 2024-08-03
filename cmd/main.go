@@ -13,12 +13,15 @@ import (
 	"github.com/o-ga09/note-app-backendapi/db/dao"
 	"github.com/o-ga09/note-app-backendapi/db/db"
 	"github.com/o-ga09/note-app-backendapi/handler"
+	"github.com/o-ga09/note-app-backendapi/pkg/logger"
+	"github.com/o-ga09/note-app-backendapi/pkg/middleware"
 	"github.com/o-ga09/note-app-backendapi/services/note"
 	"github.com/o-ga09/note-app-backendapi/services/user"
 )
 
 func main() {
 	ctx := context.Background()
+	logger.New()
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -40,7 +43,11 @@ func main() {
 	userService := user.NewUserService(userRepo)
 
 	h := handler.NewHandler(*noteService, *userService)
-	handler, err := api.NewServer(h)
+	handler, err := api.NewServer(h,
+		api.WithMiddleware(middleware.AddID()),
+		api.WithMiddleware(middleware.WithTimeout()),
+		api.WithMiddleware(middleware.RequestLogger()),
+	)
 
 	slog.Info("starting server")
 	go func() {
