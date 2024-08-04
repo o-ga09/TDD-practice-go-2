@@ -44,12 +44,10 @@ func main() {
 
 	h := handler.NewHandler(*noteService, *userService)
 	handler, err := api.NewServer(h,
-		api.WithMiddleware(middleware.AddID()),
-		api.WithMiddleware(middleware.WithTimeout()),
-		api.WithMiddleware(middleware.RequestLogger()),
+		api.WithMiddleware(middleware.AddID(), middleware.WithTimeout(), middleware.RequestLogger()),
 	)
 
-	slog.Info("starting server")
+	slog.Log(ctx, logger.SeverityInfo, "starting server")
 	go func() {
 		err = http.Serve(listen, handler)
 		if err != nil {
@@ -60,5 +58,5 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
-	slog.Info("stopping srever")
+	slog.Log(ctx, logger.SeverityInfo, "stopping srever")
 }
