@@ -4,9 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 
 	"github.com/o-ga09/note-app-backendapi/api"
 	"github.com/o-ga09/note-app-backendapi/pkg/date"
+	"github.com/o-ga09/note-app-backendapi/pkg/logger"
+	"github.com/o-ga09/note-app-backendapi/pkg/middleware"
 	"github.com/o-ga09/note-app-backendapi/services/note"
 	"github.com/o-ga09/note-app-backendapi/services/user"
 )
@@ -157,6 +160,7 @@ func (h *handler) GetUsers(ctx context.Context) (api.GetUsersRes, error) {
 			Email: api.NewOptString(u.UserEmail),
 		})
 	}
+	slog.Log(ctx, logger.SeverityInfo, "@app", "request Id", middleware.GetRequestID(ctx), "response", users)
 	return users, nil
 }
 

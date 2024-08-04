@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/o-ga09/note-app-backendapi/api"
+	"github.com/o-ga09/note-app-backendapi/pkg/logger"
 	"github.com/o-ga09/note-app-backendapi/pkg/uuid"
 	"github.com/ogen-go/ogen/middleware"
 )
@@ -15,13 +16,14 @@ type RequestId string
 
 func AddID() api.Middleware {
 	return func(req middleware.Request, next middleware.Next) (middleware.Response, error) {
+		if req.Context == nil {
+			req.SetContext(context.Background())
+		}
 		ctx := context.WithValue(req.Context, RequestId("requestId"), uuid.GenerateID())
 		req.SetContext(ctx)
 		res, err := next(req)
 		if err != nil {
-			slog.InfoContext(ctx, fmt.Sprintf("error: %v", err))
-		} else {
-			slog.InfoContext(ctx, fmt.Sprintf("response: %T", res.Type))
+			slog.Log(ctx, logger.SeverityError, fmt.Sprintf("error: %v", err))
 		}
 		return res, nil
 	}
@@ -34,9 +36,7 @@ func WithTimeout() api.Middleware {
 		req.SetContext(ctx)
 		res, err := next(req)
 		if err != nil {
-			slog.InfoContext(ctx, fmt.Sprintf("error: %v", err))
-		} else {
-			slog.InfoContext(ctx, fmt.Sprintf("response: %T", res.Type))
+			slog.Log(ctx, logger.SeverityError, fmt.Sprintf("error: %v", err))
 		}
 		return res, nil
 	}

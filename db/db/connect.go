@@ -7,6 +7,7 @@ import (
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/o-ga09/note-app-backendapi/pkg/logger"
 )
 
 func Connect(ctx context.Context) *sql.DB {
@@ -15,6 +16,6 @@ func Connect(ctx context.Context) *sql.DB {
 	if err != nil {
 		return nil
 	}
-	slog.Log(ctx, slog.LevelInfo, "db connected")
+	slog.Log(ctx, logger.SeverityInfo, "db connected")
 	return db
 }
