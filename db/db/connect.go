@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"log/slog"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func Connect(ctx context.Context) *sql.DB {
