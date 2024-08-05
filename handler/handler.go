@@ -199,13 +199,46 @@ func (h *handler) UpdateUser(ctx context.Context, req *api.UpdateUser, params ap
 	}
 	name := req.Name
 	email := req.Email
+	password := req.Password
+
+	user, err := h.userService.FetchUserById(ctx, userId.String())
+	if err != nil {
+		return nil, err
+	}
+	if name.Value == "" {
+		name.Value = user.Username
+	}
+	if email.Value == "" {
+		email.Value = user.UserEmail
+	}
+	if password.Value == "" {
+		password.Value = user.Password
+	}
+
 	err = h.userService.UpdateUser(ctx, userId, name.Value, email.Value)
 	if err != nil {
 		return nil, err
 	}
+	user, err = h.userService.FetchUserById(ctx, userId.String())
+	if err != nil {
+		return nil, err
+	}
+	createdAt, err := date.TimeToString(user.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	updatedAt, err := date.TimeToString(user.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+
 	updatedUser := &api.User{
-		Name:  name,
-		Email: email,
+		ID:        api.NewOptUUID(userId),
+		Name:      name,
+		Email:     email,
+		Password:  api.NewOptString(password.Value),
+		CreatedAt: api.NewOptDateTime(createdAt),
+		UpdatedAt: api.NewOptDateTime(updatedAt),
 	}
 	return updatedUser, nil
 }
