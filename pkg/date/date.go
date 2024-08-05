@@ -5,7 +5,7 @@ import (
 )
 
 func TimeToString(t string) (time.Time, error) {
-	layout := time.RFC3339
+	layout := "2006-01-02 15:04:05"
 	parsedTime, err := time.Parse(layout, t)
 	if err != nil {
 		return time.Now(), err

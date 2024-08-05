@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/google/uuid"
 	"github.com/o-ga09/note-app-backendapi/api"
 	"github.com/o-ga09/note-app-backendapi/pkg/date"
 	"github.com/o-ga09/note-app-backendapi/pkg/logger"
@@ -141,9 +142,21 @@ func (h *handler) GetUser(ctx context.Context, params api.GetUserParams) (api.Ge
 	if err != nil {
 		return nil, err
 	}
+	createdAt, err := date.TimeToString(res.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	updatedAt, err := date.TimeToString(res.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
 	user := &api.User{
-		Name:  api.NewOptString(res.Username),
-		Email: api.NewOptString(res.UserEmail),
+		ID:        api.NewOptUUID(res.UserID),
+		Password:  api.NewOptString(res.Password),
+		Name:      api.NewOptString(res.Username),
+		Email:     api.NewOptString(res.UserEmail),
+		CreatedAt: api.NewOptDateTime(createdAt),
+		UpdatedAt: api.NewOptDateTime(updatedAt),
 	}
 	return user, nil
 }
@@ -155,20 +168,38 @@ func (h *handler) GetUsers(ctx context.Context) (api.GetUsersRes, error) {
 	}
 	users := &api.Users{}
 	for _, u := range res {
+		createdAt, err := date.TimeToString(u.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		updatedAt, err := date.TimeToString(u.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
 		users.Users = append(users.Users, api.User{
-			Name:  api.NewOptString(u.Username),
-			Email: api.NewOptString(u.UserEmail),
+			ID:        api.NewOptUUID(u.UserID),
+			Name:      api.NewOptString(u.Username),
+			Email:     api.NewOptString(u.UserEmail),
+			Password:  api.NewOptString(u.Password),
+			CreatedAt: api.NewOptDateTime(createdAt),
+			UpdatedAt: api.NewOptDateTime(updatedAt),
 		})
 	}
+	users.TotalCount = api.NewOptInt32(int32(len(users.Users)))
+	users.Count = api.NewOptInt32(int32(len(users.Users)))
+	users.NextPagetoken = api.NewOptString("")
 	slog.Log(ctx, logger.SeverityInfo, "@app", "request Id", middleware.GetRequestID(ctx), "response", users)
 	return users, nil
 }
 
 func (h *handler) UpdateUser(ctx context.Context, req *api.UpdateUser, params api.UpdateUserParams) (api.UpdateUserRes, error) {
-	userId := params.UserId
+	userId, err := uuid.Parse(params.UserId)
+	if err != nil {
+		return nil, err
+	}
 	name := req.Name
 	email := req.Email
-	err := h.userService.UpdateUser(ctx, userId, name.Value, email.Value)
+	err = h.userService.UpdateUser(ctx, userId, name.Value, email.Value)
 	if err != nil {
 		return nil, err
 	}

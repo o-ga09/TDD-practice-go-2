@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/google/uuid"
 	"github.com/o-ga09/note-app-backendapi/db/db"
 	"github.com/o-ga09/note-app-backendapi/domain"
 )
@@ -22,8 +23,12 @@ func (dao *userDao) GetUserById(ctx context.Context, id string) (*domain.User, e
 	if err != nil {
 		return nil, err
 	}
+	userId, err := uuid.Parse(res.UserID)
+	if err != nil {
+		return nil, err
+	}
 	user := domain.User{
-		UserID:    res.UserID,
+		UserID:    userId,
 		Username:  res.Email,
 		Password:  res.Password,
 		CreatedAt: res.CreatedAt.Time.Format("2006-01-02 15:04:05"),
@@ -37,11 +42,16 @@ func (dao *userDao) GetUsers(ctx context.Context) ([]domain.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	users := make([]domain.User, len(res))
+	users := []domain.User{}
 	for _, r := range res {
+		userId, err := uuid.Parse(r.UserID)
+		if err != nil {
+			return nil, err
+		}
 		user := domain.User{
-			UserID:    r.UserID,
-			Username:  r.Email,
+			UserID:    userId,
+			Username:  r.Name,
+			UserEmail: r.Email,
 			Password:  r.Password,
 			CreatedAt: r.CreatedAt.Time.Format("2006-01-02 15:04:05"),
 			UpdatedAt: r.UpdatedAt.Time.Format("2006-01-02 15:04:05"),
@@ -53,7 +63,7 @@ func (dao *userDao) GetUsers(ctx context.Context) ([]domain.User, error) {
 
 func (dao *userDao) CreateUser(ctx context.Context, user domain.User) error {
 	_, err := dao.query.CreateUser(ctx, db.CreateUserParams{
-		UserID:   user.UserID,
+		UserID:   user.UserID.String(),
 		Email:    user.Username,
 		Password: user.Password,
 	})
@@ -65,7 +75,7 @@ func (dao *userDao) CreateUser(ctx context.Context, user domain.User) error {
 
 func (dao *userDao) UpdateUser(ctx context.Context, user domain.User) error {
 	err := dao.query.UpdateUser(ctx, db.UpdateUserParams{
-		UserID:   user.UserID,
+		UserID:   user.UserID.String(),
 		Email:    user.Username,
 		Password: user.Password,
 	})

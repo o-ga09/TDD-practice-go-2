@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/o-ga09/note-app-backendapi/domain"
 )
 
@@ -55,7 +56,7 @@ func (s *UserService) CreateUser(ctx context.Context, username, userEmail string
 	return nil
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, id, username, userEmail string) error {
+func (s *UserService) UpdateUser(ctx context.Context, id uuid.UUID, username, userEmail string) error {
 	user := domain.User{
 		UserID:    id,
 		Username:  username,
