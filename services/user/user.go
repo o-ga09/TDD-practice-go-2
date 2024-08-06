@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/o-ga09/note-app-backendapi/api"
 	"github.com/o-ga09/note-app-backendapi/domain"
+	"github.com/o-ga09/note-app-backendapi/pkg/date"
 )
 
 type UserService struct {
@@ -44,16 +46,39 @@ func (s *UserService) FetchUsers(ctx context.Context) ([]*domain.User, error) {
 	return users, nil
 }
 
-func (s *UserService) CreateUser(ctx context.Context, username, userEmail string) error {
+func (s *UserService) CreateUser(ctx context.Context, username, userEmail, password string) (api.User, error) {
 	user := domain.User{
+		UserID:    uuid.New(),
 		Username:  username,
 		UserEmail: userEmail,
+		Password:  password,
 	}
 	err := s.userRepo.CreateUser(ctx, user)
 	if err != nil {
-		return err
+		return api.User{}, err
 	}
-	return nil
+	res, err := s.userRepo.GetUserById(ctx, user.UserID.String())
+	if err != nil {
+		return api.User{}, err
+	}
+
+	createdAt, err := date.TimeToString(res.CreatedAt)
+	if err != nil {
+		return api.User{}, err
+	}
+	updatedAt, err := date.TimeToString(res.UpdatedAt)
+	if err != nil {
+		return api.User{}, err
+	}
+	createdUser := api.User{
+		ID:        api.NewOptUUID(res.UserID),
+		Name:      api.NewOptString(res.Username),
+		Email:     api.NewOptString(res.UserEmail),
+		Password:  api.NewOptString(res.Password),
+		CreatedAt: api.NewOptDateTime(createdAt),
+		UpdatedAt: api.NewOptDateTime(updatedAt),
+	}
+	return createdUser, nil
 }
 
 func (s *UserService) UpdateUser(ctx context.Context, id uuid.UUID, username, userEmail string) error {

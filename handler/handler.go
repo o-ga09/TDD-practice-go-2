@@ -117,15 +117,12 @@ func (h *handler) UpdateNote(ctx context.Context, req *api.Note, params api.Upda
 func (h *handler) CreateUser(ctx context.Context, req *api.User) (api.CreateUserRes, error) {
 	name := req.Name
 	email := req.Email
-	err := h.userService.CreateUser(ctx, name.Value, email.Value)
+	password := req.Password
+	res, err := h.userService.CreateUser(ctx, name.Value, email.Value, password.Value)
 	if err != nil {
 		return nil, err
 	}
-	user := &api.User{
-		Name:  name,
-		Email: email,
-	}
-	return user, nil
+	return &res, nil
 }
 
 func (h *handler) DeleteUser(ctx context.Context, params api.DeleteUserParams) (api.DeleteUserRes, error) {

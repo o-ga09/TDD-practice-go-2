@@ -64,6 +64,7 @@ func (dao *userDao) GetUsers(ctx context.Context) ([]domain.User, error) {
 func (dao *userDao) CreateUser(ctx context.Context, user domain.User) error {
 	_, err := dao.query.CreateUser(ctx, db.CreateUserParams{
 		UserID:   user.UserID.String(),
+		Name:     user.Username,
 		Email:    user.Username,
 		Password: user.Password,
 	})
@@ -76,6 +77,7 @@ func (dao *userDao) CreateUser(ctx context.Context, user domain.User) error {
 func (dao *userDao) UpdateUser(ctx context.Context, user domain.User) error {
 	err := dao.query.UpdateUser(ctx, db.UpdateUserParams{
 		UserID:   user.UserID.String(),
+		Name:     user.Username,
 		Email:    user.Username,
 		Password: user.Password,
 	})
