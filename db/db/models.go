@@ -28,6 +28,6 @@ type User struct {
 }
 
 type UserNote struct {
-	UserID int64
-	NoteID int64
+	UserID string
+	NoteID string
 }

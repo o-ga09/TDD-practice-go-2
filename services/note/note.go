@@ -2,7 +2,9 @@ package note
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/o-ga09/note-app-backendapi/domain"
 )
 
@@ -29,7 +31,7 @@ func (s *NoteService) FetchNotes(ctx context.Context) ([]*domain.Note, error) {
 	if err != nil {
 		return nil, err
 	}
-	notes := make([]*domain.Note, 0)
+	notes := []*domain.Note{}
 	for _, note := range res {
 		note := domain.Note{
 			NoteID:    note.NoteID,
@@ -40,32 +42,47 @@ func (s *NoteService) FetchNotes(ctx context.Context) ([]*domain.Note, error) {
 		}
 		notes = append(notes, &note)
 	}
+	fmt.Println(len(notes))
 	return notes, nil
 }
 
-func (s *NoteService) CreateNote(ctx context.Context, title, content string) error {
+func (s *NoteService) CreateNote(ctx context.Context, title, content string) (domain.Note, error) {
+	noteId := uuid.New()
 	note := domain.Note{
+		NoteID:  noteId,
 		Title:   title,
 		Content: content,
 	}
 	err := s.noteRepo.CreateNote(ctx, note)
 	if err != nil {
-		return err
+		return domain.Note{}, err
 	}
-	return nil
+	createdNote, err := s.noteRepo.GetNoteById(ctx, noteId.String())
+	if err != nil {
+		return domain.Note{}, err
+	}
+	return *createdNote, nil
 }
 
-func (s *NoteService) UpdateNote(ctx context.Context, id, title, content string) error {
+func (s *NoteService) UpdateNote(ctx context.Context, id, title, content string) (domain.Note, error) {
+	noteId, err := uuid.Parse(id)
+	if err != nil {
+		return domain.Note{}, err
+	}
 	note := domain.Note{
-		NoteID:  id,
+		NoteID:  noteId,
 		Title:   title,
 		Content: content,
 	}
-	err := s.noteRepo.UpdateNote(ctx, note)
+	err = s.noteRepo.UpdateNote(ctx, note)
 	if err != nil {
-		return err
+		return domain.Note{}, err
 	}
-	return nil
+	updatedNote, err := s.noteRepo.GetNoteById(ctx, noteId.String())
+	if err != nil {
+		return domain.Note{}, err
+	}
+	return *updatedNote, nil
 }
 
 func (s *NoteService) DeleteNoteById(ctx context.Context, id string) error {

@@ -27,15 +27,26 @@ func NewHandler(n note.NoteService, u user.UserService) *handler {
 func (h *handler) CreateNote(ctx context.Context, req *api.Note) (api.CreateNoteRes, error) {
 	title := req.Title
 	content := req.Content
-	err := h.noteService.CreateNote(ctx, title.Value, content.Value)
+	note, err := h.noteService.CreateNote(ctx, title.Value, content.Value)
 	if err != nil {
 		return nil, err
 	}
-	note := &api.Note{
-		Title:   title,
-		Content: content,
+	createdAt, err := date.TimeToString(note.CreatedAt)
+	if err != nil {
+		return nil, err
 	}
-	return note, nil
+	updatedAt, err := date.TimeToString(note.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	createdNote := &api.Note{
+		ID:        api.NewOptUUID(note.NoteID),
+		Title:     api.NewOptString(note.Title),
+		Content:   api.NewOptString(note.Content),
+		CreatedAt: api.NewOptDateTime(createdAt),
+		UpdatedAt: api.NewOptDateTime(updatedAt),
+	}
+	return createdNote, nil
 }
 
 func (h *handler) DeleteNote(ctx context.Context, params api.DeleteNoteParams) (api.DeleteNoteRes, error) {
@@ -44,7 +55,13 @@ func (h *handler) DeleteNote(ctx context.Context, params api.DeleteNoteParams) (
 	if err != nil {
 		return nil, err
 	}
-	deletedNoteId := &api.DeleteNote{}
+	id, err := uuid.Parse(noteId)
+	if err != nil {
+		return nil, err
+	}
+	deletedNoteId := &api.DeleteNote{
+		Deletednoteid: api.NewOptUUID(id),
+	}
 	return deletedNoteId, nil
 }
 
@@ -65,6 +82,7 @@ func (h *handler) GetNote(ctx context.Context, params api.GetNoteParams) (api.Ge
 	}
 
 	note := &api.Note{
+		ID:        api.NewOptUUID(res.NoteID),
 		Title:     api.NewOptString(res.Title),
 		Content:   api.NewOptString(res.Content),
 		CreatedAt: api.NewOptDateTime(createdAt),
@@ -88,7 +106,10 @@ func (h *handler) GetNotes(ctx context.Context) (api.GetNotesRes, error) {
 		if err != nil {
 			return nil, err
 		}
+		fmt.Println(createdAt)
+		fmt.Println(updatedAt)
 		notes.Notes = append(notes.Notes, api.Note{
+			ID:        api.NewOptUUID(n.NoteID),
 			Title:     api.NewOptString(n.Title),
 			Content:   api.NewOptString(n.Content),
 			CreatedAt: api.NewOptDateTime(createdAt),
@@ -102,14 +123,25 @@ func (h *handler) UpdateNote(ctx context.Context, req *api.Note, params api.Upda
 	noteId := params.NoteId
 	title := req.Title
 	content := req.Content
-	err := h.noteService.UpdateNote(ctx, noteId, title.Value, content.Value)
+	note, err := h.noteService.UpdateNote(ctx, noteId, title.Value, content.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	cretaedAt, err := date.TimeToString(note.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	updatedAt, err := date.TimeToString(note.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
 
 	updatedNote := &api.UpdateNote{
-		Title:   title,
-		Content: content,
+		Title:     title,
+		Content:   content,
+		CreatedAt: api.NewOptDateTime(cretaedAt),
+		UpdatedAt: api.NewOptDateTime(updatedAt),
 	}
 	return updatedNote, nil
 }

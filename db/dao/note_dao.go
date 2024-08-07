@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/google/uuid"
 	"github.com/o-ga09/note-app-backendapi/db/db"
 	"github.com/o-ga09/note-app-backendapi/domain"
 )
@@ -22,8 +23,12 @@ func (dao *noteDao) GetNoteById(ctx context.Context, id string) (*domain.Note, e
 	if err != nil {
 		return nil, err
 	}
+	noteId, err := uuid.Parse(res.NoteID)
+	if err != nil {
+		return nil, err
+	}
 	note := domain.Note{
-		NoteID:    res.NoteID,
+		NoteID:    noteId,
 		Title:     res.Title,
 		Content:   res.Content,
 		CreatedAt: res.CreatedAt.Time.Format("2006-01-02 15:04:05"),
@@ -33,14 +38,18 @@ func (dao *noteDao) GetNoteById(ctx context.Context, id string) (*domain.Note, e
 }
 
 func (dao *noteDao) GetNotes(ctx context.Context) ([]domain.Note, error) {
-	res, err := dao.query.GetNotes(ctx, "")
+	res, err := dao.query.GetNotes(ctx)
 	if err != nil {
 		return nil, err
 	}
-	notes := make([]domain.Note, len(res))
+	notes := []domain.Note{}
 	for _, r := range res {
+		noteId, err := uuid.Parse(r.NoteID)
+		if err != nil {
+			return nil, err
+		}
 		note := domain.Note{
-			NoteID:    r.NoteID,
+			NoteID:    noteId,
 			Title:     r.Title,
 			Content:   r.Content,
 			CreatedAt: r.CreatedAt.Time.Format("2006-01-02 15:04:05"),
@@ -53,7 +62,7 @@ func (dao *noteDao) GetNotes(ctx context.Context) ([]domain.Note, error) {
 
 func (dao *noteDao) CreateNote(ctx context.Context, note domain.Note) error {
 	_, err := dao.query.CreateNote(ctx, db.CreateNoteParams{
-		NoteID:  note.NoteID,
+		NoteID:  note.NoteID.String(),
 		Title:   note.Title,
 		Content: note.Content,
 	})
@@ -66,7 +75,7 @@ func (dao *noteDao) CreateNote(ctx context.Context, note domain.Note) error {
 
 func (dao *noteDao) UpdateNote(ctx context.Context, note domain.Note) error {
 	err := dao.query.UpdateNote(ctx, db.UpdateNoteParams{
-		NoteID:  note.NoteID,
+		NoteID:  note.NoteID.String(),
 		Title:   note.Title,
 		Content: note.Content,
 	})

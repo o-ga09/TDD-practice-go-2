@@ -4,7 +4,6 @@ WHERE note_id = ? LIMIT 1;
 
 -- name: GetNotes :many
 SELECT * FROM notes
-WHERE note_id = ?
 ORDER BY created_at DESC;
 
 -- name: CreateNote :execresult

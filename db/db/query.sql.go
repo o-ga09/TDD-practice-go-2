@@ -94,12 +94,11 @@ func (q *Queries) GetNote(ctx context.Context, noteID string) (Note, error) {
 
 const getNotes = `-- name: GetNotes :many
 SELECT id, note_id, title, content, created_at, updated_at FROM notes
-WHERE note_id = ?
 ORDER BY created_at DESC
 `
 
-func (q *Queries) GetNotes(ctx context.Context, noteID string) ([]Note, error) {
-	rows, err := q.db.QueryContext(ctx, getNotes, noteID)
+func (q *Queries) GetNotes(ctx context.Context) ([]Note, error) {
+	rows, err := q.db.QueryContext(ctx, getNotes)
 	if err != nil {
 		return nil, err
 	}
