@@ -27,3 +27,40 @@
   - [ ] specの追加
   - [ ] ユーザーを認可できる
   - [ ] ユーザーを認証できる
+
+## 参考情報
+
+- sqlcを使用したコード生成
+
+```yaml
+version: "2"
+sql:
+  - engine: "mysql"
+    queries: "query.sql"
+    schema: "schema.sql"
+    gen:
+      go:
+        package: "db"
+        out: "db"
+```
+
+```bash
+# cqlc.ymlがあるディレクトリ
+$ cd db
+$ sqlc generate
+```
+
+- ogenを使用したコード生成
+
+```go
+// generate.go
+package api
+
+import _ "github.com/ogen-go/ogen"
+
+//go:generate go run github.com/ogen-go/ogen/cmd/ogen --target . -package api --clean ../docs/openapi.yml
+```
+
+```bash
+$ go generate ./...
+```
