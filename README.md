@@ -45,7 +45,7 @@ sql:
 ```
 
 ```bash
-# cqlc.ymlがあるディレクトリ
+# sqlc.ymlがあるディレクトリ
 $ cd db
 $ sqlc generate
 ```
